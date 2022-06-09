@@ -253,6 +253,7 @@ DEPENDENCIES
   stimulus-rails
   turbo-rails
   tzinfo-data
+  view_component (~> 2.55)
   web-console
   webdrivers
 
