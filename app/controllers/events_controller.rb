@@ -8,7 +8,7 @@ class EventsController < ApplicationController
 
   # GET /events/new
   def new
-    @event = Event.new
+    @event = Event.new(start: convert_date(params[:start]), end: convert_date(params[:end]), color: '#404bad')
   end
 
   # GET /events/1/edit
@@ -21,11 +21,10 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
-        format.turbo_stream { redirect_to events_url, notice: "Event was successfully created." }
         format.html { redirect_to events_url, notice: "Event was successfully created." }
-        format.json { render :show, status: :created, location: @event }
+        format.turbo_stream { turbo_notice("Event was successfully created.") }
+        format.json { render :edit, status: :created, location: @event }
       else
-        format.turbo_stream { render :new, status: :unprocessable_entity }
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @event.errors, status: :unprocessable_entity }
       end
@@ -36,11 +35,10 @@ class EventsController < ApplicationController
   def update
     respond_to do |format|
       if @event.update(event_params)
-        format.turbo_stream { redirect_to events_url, notice: "Event was successfully updated." }
         format.html { redirect_to events_url, notice: "Event was successfully updated." }
-        format.json { render :show, status: :ok, location: @event }
+        format.turbo_stream { turbo_notice("Event was successfully updated.") }
+        format.json { render :edit, status: :ok, location: @event }
       else
-        format.turbo_stream { render :edit, status: :unprocessable_entity }
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @event.errors, status: :unprocessable_entity }
       end
@@ -52,14 +50,25 @@ class EventsController < ApplicationController
     @event.destroy
 
     respond_to do |format|
-      format.turbo_stream { redirect_to events_url, notice: "Event was successfully destroyed." }
       format.html { redirect_to events_url, notice: "Event was successfully destroyed." }
+      format.turbo_stream { turbo_notice("Event was successfully destroyed.") }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+  # Use callbacks to share common setup or constraints between actions.
+
+    def turbo_notice(notice)
+      render turbo_stream: turbo_stream.update('popup',
+        ApplicationController.render(NoticeComponent.new(notice: notice))
+      )
+    end
+
+    def convert_date(date)
+      I18n.l(date&.to_datetime || Time.zone.now)
+    end
+
     def set_event
       @event = Event.find(params[:id])
     end

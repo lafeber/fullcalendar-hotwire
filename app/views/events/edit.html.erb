@@ -1,21 +1,4 @@
-<%= turbo_frame_tag "modal" do %>
-  <div data-controller="modal" data-modal-allow-background-close="true">
-    <div data-modal-target="container" data-action="click->modal#closeBackground keyup@window->modal#closeWithKeyboard" class="animated fadeIn fixed inset-0 overflow-y-auto flex items-center justify-center" style="z-index: 9999;">
-      <!-- Modal Inner Container -->
-      <div class="max-h-screen w-full max-w-lg relative">
-        <!-- Modal Card -->
-        <div class="m-1 bg-white rounded shadow">
-          <div class="p-8">
-            <h2 class="text-xl mb-4">Editing event</h2>
-            <p class="mb-4">
-              <%= render "form", event: @event %>
-              <a class="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium cursor-pointer" data-action="click->modal#close">Close</a>
-            </p>
-            <hr class="mt-1">
-            <%= button_to "Destroy", @event, method: :delete, data: {'turbo-frame' => '_top'}, class: "rounded-lg py-3 mt-2 px-5 bg-red-600 text-white inline-block font-medium cursor-pointer" %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<%= render(ModalComponent.new(title: "Editing event")) do %>
+  <%= render "form", event: @event %>
+  <%= button_to "Destroy", @event, method: :delete, data: {'turbo-frame' => '_top'}, class: "rounded-lg py-3 mt-2 px-5 bg-red-600 text-white inline-block font-medium cursor-pointer" %>
 <% end %>

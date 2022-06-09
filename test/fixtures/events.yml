@@ -3,8 +3,8 @@
 one:
   title: MyString
   start: 2022-05-11 20:25:48
-  end: 2022-05-11 20:25:48
-  color: MyString
+  end: 2022-05-11 20:29:48
+  color: '#123456'
   all_day: false
 
 two:

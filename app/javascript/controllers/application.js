@@ -1,9 +1,9 @@
 import { Application } from "@hotwired/stimulus"
+import { Modal, Alert } from "tailwindcss-stimulus-components"
 
 const application = Application.start()
-
-import { Modal } from "tailwindcss-stimulus-components"
 application.register('modal', Modal)
+application.register('alert', Alert)
 
 // Configure Stimulus development experience
 application.debug = false

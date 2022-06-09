@@ -7,3 +7,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* hidden */
+
+.fc-event{
+  cursor: pointer;
+}
+
+.field_with_errors input, .field_with_errors label {
+  border-color: #ff6969;
+}

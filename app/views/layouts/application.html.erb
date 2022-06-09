@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= favicon_link_tag "https://calendar.google.com/googlecalendar/images/favicons_2020q4/calendar_#{Time.zone.now.day}.ico" %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
-    <style>.fc-event{cursor: pointer;}</style>
   </head>
 
   <body>
-    <%= turbo_frame_tag "modal" %>
     <%= yield %>
   </body>
 </html>

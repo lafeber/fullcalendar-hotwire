@@ -1,0 +1,19 @@
+<turbo-frame id="popup" data-calendar-target="popup">
+  <div data-controller="modal" data-modal-allow-background-close="false">
+    <div data-modal-target="container" data-action="click->modal#closeBackground keyup@window->modal#closeWithKeyboard" class="animated fadeIn fixed inset-0 overflow-y-auto flex items-center justify-center" style="z-index: 9999;">
+      <div class="max-h-screen w-full max-w-lg relative">
+        <div class="m-1 bg-white rounded shadow">
+          <div class="p-8">
+            <div class="flex w-full justify-between">
+              <h2 class="text-xl mb-4"><%= @title %></h2>
+              <button class="ml-2 text-xl inline-block font-medium cursor-pointer" data-action="click->modal#close">&times;</button>
+            </div>
+            <p class="mb-4">
+              <%= content %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</turbo-frame>

@@ -1,6 +1,7 @@
 {
   "name": "app",
   "private": "true",
+  "license": "MIT",
   "dependencies": {
     "@fullcalendar/core": "^5.11.0",
     "@fullcalendar/daygrid": "^5.11.0",

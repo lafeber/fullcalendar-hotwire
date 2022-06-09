@@ -1,19 +1,3 @@
-<%= turbo_frame_tag "modal" do %>
-  <div data-controller="modal" data-modal-allow-background-close="false">
-    <div data-modal-target="container" data-action="click->modal#closeBackground keyup@window->modal#closeWithKeyboard" class="animated fadeIn fixed inset-0 overflow-y-auto flex items-center justify-center" style="z-index: 9999;">
-      <!-- Modal Inner Container -->
-      <div class="max-h-screen w-full max-w-lg relative">
-        <!-- Modal Card -->
-        <div class="m-1 bg-white rounded shadow">
-          <div class="p-8">
-            <h2 class="text-xl mb-4">New event</h2>
-            <p class="mb-4">
-              <%= render "form", event: @event %>
-              <a class="ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium cursor-pointer" data-action="click->modal#close">Close</a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<%= render(ModalComponent.new(title: "New event")) do %>
+  <%= render "form", event: @event %>
 <% end %>

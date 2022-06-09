@@ -20,12 +20,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
       post events_url, params: { event: { all_day: @event.all_day, color: @event.color, end: @event.end, start: @event.start, title: @event.title } }
     end
 
-    assert_redirected_to event_url(Event.last)
-  end
-
-  test "should show event" do
-    get event_url(@event)
-    assert_response :success
+    assert_redirected_to events_url
   end
 
   test "should get edit" do
@@ -35,7 +30,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update event" do
     patch event_url(@event), params: { event: { all_day: @event.all_day, color: @event.color, end: @event.end, start: @event.start, title: @event.title } }
-    assert_redirected_to event_url(@event)
+    assert_redirected_to events_url
   end
 
   test "should destroy event" do

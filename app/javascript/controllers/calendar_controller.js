@@ -6,13 +6,15 @@ import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 
 export default class extends Controller {
+  static targets = [ "popup", "window" ];
+
   connect() {
-    let calendar = new Calendar(this.element, {
+    let overlay = this.popupTarget;
+
+    this.calendar = new Calendar(this.windowTarget, {
       plugins: [ dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin ],
       selectable: true,
       timeZone: 'UTC',
-      slotLabelFormat: {hour: 'numeric', minute: '2-digit', hour12: false},
-      height: '800px',
       events: '/events.json',
       initialView: 'timeGridWeek',
       headerToolbar: {
@@ -21,12 +23,21 @@ export default class extends Controller {
         right: 'dayGridMonth,timeGridWeek,listWeek'
       },
       eventClick: function(info) {
-        document.querySelector("#modal").src = '/events/' + info.event.id + '/edit';
+        overlay.src = '/events/' + info.event.id + '/edit';
       },
       select: function(info) {
-        document.querySelector("#modal").src = '/events/new?start=' + info.startStr + '&end=' + info.endStr;
+        overlay.src = '/events/new?start=' + info.startStr + '&end=' + info.endStr;
       },
     });
-    calendar.render();
+
+    window.addEventListener('load', () => {
+      this.calendar.render();
+    });
+  }
+
+  refresh(e) {
+    if (e.detail.success) {
+      this.calendar.refetchEvents();
+    }
   }
 }
