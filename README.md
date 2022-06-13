@@ -10,4 +10,4 @@ A demonstration of what you can achieve with one scaffold, one small stimulus co
 * /bin/dev
 * Go to http://localhost:3000
 
-[![Screenshot](https://github.com/lafeber/fullcalendar-hotwire/blob/7be9490a13da53dd93e3ac9038e48ac310e318fe/screenshot.png)]
+[![Screenshot](https://github.com/lafeber/fullcalendar-hotwire/blob/499e3d4c2d9782189a043a55e66d6c23d0b6a890/screenshot.png)]
