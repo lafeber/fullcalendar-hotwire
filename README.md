@@ -6,8 +6,6 @@ A demonstration of what you can achieve with one scaffold, one small stimulus co
 
 # To start:
 
-* bundle
-* yarn
-* rails db:create db:migrate
+* /bin/setup
 * /bin/dev
 * Go to http://localhost:3000
