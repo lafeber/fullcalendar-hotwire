@@ -10,15 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_05_11_182548) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_04_102100) do
   create_table "events", force: :cascade do |t|
-    t.string "title", null: false
-    t.datetime "start", null: false
-    t.datetime "end", null: false
-    t.string "color", limit: 7
-    t.boolean "all_day", default: false, null: false
+    t.string "title"
+    t.datetime "start"
+    t.datetime "end"
+    t.string "color"
+    t.boolean "all_day"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.json "recurring"
   end
 
 end

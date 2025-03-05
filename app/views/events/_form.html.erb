@@ -31,6 +31,26 @@
     <%= form.check_box :all_day, class: "block mt-2 h-5 w-5" %>
   </div>
 
+  <div data-controller='toggle' class="m-2">
+    <div class="my-5">
+      <%= form.label :every %>
+      <%#= data: { action: "click->toggle#hide for all, show for custom" } %>
+      <%= form.select :every, %w[once day week month year], {} , class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    </div>
+
+    <div class="hidden" data-toggle-target="toggleable">
+      <div class="my-5">
+        <%= form.label :interval %>
+        <%= form.number_field :interval, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+      </div>
+
+      <div class="my-5">
+        <%= form.label :until %>
+        <%= form.date_field :until, value: form.object.presence || nil, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+      </div>
+    </div>
+  </div>
+
   <div class="my-5">
     <%= form.label :color %>
     <%= form.color_field :color, class: "block shadow rounded-md border border-gray-200 outline-none px-1 mt-2 w-full" %>

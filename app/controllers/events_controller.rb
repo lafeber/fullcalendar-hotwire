@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
   before_action :set_event, only: %i[ edit update destroy ]
+  before_action :empty_recurring_for_once, only: %i[ create update ]
 
   # GET /events or /events.json
   def index
@@ -8,7 +9,7 @@ class EventsController < ApplicationController
 
   # GET /events/new
   def new
-    @event = Event.new(start: convert_date(params[:start]), end: convert_date(params[:end]), color: '#404bad')
+    @event = Event.new(start:, end:, color: '#404bad')
   end
 
   # GET /events/1/edit
@@ -57,6 +58,22 @@ class EventsController < ApplicationController
   end
 
   private
+
+  def start
+    I18n.l(params[:start].to_datetime || DateTime.current, format: :long)
+  end
+
+  def end
+    I18n.l(params[:end].to_datetime || 1.hour.from_now, format: :long)
+  end
+
+  def empty_recurring_for_once
+    if params[:event][:every] == "once"
+      Event::RECURRING_FIELDS.each { |f| params[:event].delete(f) }
+      params[:event][:recurring] = nil
+    end
+  end
+
   # Use callbacks to share common setup or constraints between actions.
 
     def turbo_notice(notice)
@@ -65,16 +82,14 @@ class EventsController < ApplicationController
       )
     end
 
-    def convert_date(date)
-      I18n.l(date&.to_datetime || Time.zone.now)
-    end
-
     def set_event
       @event = Event.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.require(:event).permit(:title, :start, :end, :color, :all_day)
+      params.require(:event).permit(:title, :start, :end, :color, :all_day, :recurring,
+        *Event::RECURRING_FIELDS
+      )
     end
 end
