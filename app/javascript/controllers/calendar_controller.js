@@ -39,8 +39,19 @@ export default class extends Controller {
 
     window.addEventListener("load", () => {
       this.calendar.render();
+      this.setView();
+    });
+
+    window.addEventListener("resize", () => {
+      this.setView();
     });
   }
+
+  setView() {
+    if (window.innerWidth < 800) {
+      this.calendar.changeView('listWeek');
+    }
+  };
 
   refresh(e) {
     if (e.detail.success) {
