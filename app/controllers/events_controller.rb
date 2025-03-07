@@ -60,11 +60,11 @@ class EventsController < ApplicationController
   private
 
   def start
-    I18n.l(params[:start].to_datetime || DateTime.current, format: :long)
+    I18n.l(params[:start]&.to_datetime || DateTime.current, format: :long)
   end
 
   def end
-    I18n.l(params[:end].to_datetime || 1.hour.from_now, format: :long)
+    I18n.l(params[:end]&.to_datetime || 1.hour.from_now, format: :long)
   end
 
   def empty_recurring_for_once
