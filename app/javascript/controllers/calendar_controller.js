@@ -4,6 +4,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
+import { put } from "@rails/request.js";
 
 export default class extends Controller {
   static targets = [ "popup", "window" ];
@@ -14,6 +15,7 @@ export default class extends Controller {
     this.calendar = new Calendar(this.windowTarget, {
       plugins: [ dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin ],
       selectable: true,
+      editable: true,
       timeZone: "Amsterdam",
       events: "/events.json",
       initialView: "timeGridWeek",
@@ -24,6 +26,11 @@ export default class extends Controller {
       },
       eventClick: function(info) {
         overlay.src = `/events/${info.event.id}/edit`;
+      },
+      eventDrop: function(info) {
+        put(`/events/${info.event.id}`,
+          { body: { event: { start: info.event.startStr, end: info.event.endStr } }}
+        );
       },
       select: function(info) {
         overlay.src = `/events/new?start=${info.startStr}&end=${info.endStr}`;

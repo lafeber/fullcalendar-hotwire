@@ -36,7 +36,7 @@ class EventsController < ApplicationController
   def update
     respond_to do |format|
       if @event.update(event_params)
-        format.html { redirect_to events_url, notice: "Event was successfully updated." }
+        format.html { turbo_notice("Event was successfully updated.") }
         format.turbo_stream { turbo_notice("Event was successfully updated.") }
         format.json { render :edit, status: :ok, location: @event }
       else
