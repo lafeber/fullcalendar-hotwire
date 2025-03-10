@@ -76,3 +76,5 @@ group :test do
 end
 
 gem "view_component", "~> 2.55"
+
+gem "recurrence"

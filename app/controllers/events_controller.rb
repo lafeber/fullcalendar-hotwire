@@ -4,12 +4,17 @@ class EventsController < ApplicationController
 
   # GET /events or /events.json
   def index
-    @events = Event.all
+    if params[:start]
+      @events = Event.single_in_period(starts_at, ends_at).to_a
+      @events.concat(Event.recurring_in_period(starts_at, ends_at))
+    else
+      @events = [] 
+    end
   end
 
   # GET /events/new
   def new
-    @event = Event.new(start:, end:, color: '#404bad')
+    @event = Event.new(starts_at:, ends_at:, color: '#404bad')
   end
 
   # GET /events/1/edit
@@ -59,11 +64,11 @@ class EventsController < ApplicationController
 
   private
 
-  def start
+  def starts_at
     I18n.l(params[:start]&.to_datetime || DateTime.current, format: :long)
   end
 
-  def end
+  def ends_at
     I18n.l(params[:end]&.to_datetime || 1.hour.from_now, format: :long)
   end
 
