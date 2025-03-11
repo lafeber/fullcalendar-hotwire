@@ -25,7 +25,7 @@ export default class extends Controller {
         right: "dayGridMonth,timeGridWeek,listWeek"
       },
       eventClick: function(info) {
-        overlay.src = `/events/${info.event.id}/edit`;
+        overlay.src = `/events/${info.event.id}?date=${info.event.startStr}`;
       },
       eventDrop: function(info) {
         put(`/events/${info.event.id}`,

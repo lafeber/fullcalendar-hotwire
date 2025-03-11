@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: %i[ edit update destroy ]
+  before_action :set_event, only: %i[ show edit update destroy ]
   before_action :empty_recurring_for_once, only: %i[ create update ]
 
   # GET /events or /events.json
@@ -8,13 +8,18 @@ class EventsController < ApplicationController
       @events = Event.single_in_period(starts_at, ends_at).to_a
       @events.concat(Event.recurring_in_period(starts_at, ends_at))
     else
-      @events = [] 
+      @events = []
     end
   end
 
   # GET /events/new
   def new
     @event = Event.new(starts_at:, ends_at:, color: '#404bad')
+  end
+
+  # GET /events/1
+  def show
+    @date = Date.parse(params[:date])
   end
 
   # GET /events/1/edit
@@ -28,7 +33,7 @@ class EventsController < ApplicationController
     respond_to do |format|
       if @event.save
         format.html { redirect_to events_url, notice: "Event was successfully created." }
-        format.turbo_stream { turbo_notice("Event was successfully created.") }
+        format.turbo_stream { turbo_notice("Success!") }
         format.json { render :edit, status: :created, location: @event }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -53,12 +58,10 @@ class EventsController < ApplicationController
 
   # DELETE /events/1 or /events/1.json
   def destroy
-    @event.destroy
-
     respond_to do |format|
-      format.html { redirect_to events_url, notice: "Event was successfully destroyed." }
-      format.turbo_stream { turbo_notice("Event was successfully destroyed.") }
-      format.json { head :no_content }
+      if @event.destroy
+        format.turbo_stream { turbo_notice("Event was successfully destroyed.") }
+      end
     end
   end
 
@@ -93,7 +96,7 @@ class EventsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.require(:event).permit(:title, :start, :end, :color, :all_day, :recurring,
+      params.require(:event).permit(:title, :start, :end, :color, :all_day, :parent_id, :recurring,
         *Event::RECURRING_FIELDS
       )
     end

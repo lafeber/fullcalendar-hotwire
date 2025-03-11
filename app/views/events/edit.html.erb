@@ -1,4 +1,3 @@
 <%= render(ModalComponent.new(title: "Editing event")) do %>
   <%= render "form", event: @event %>
-  <%= button_to "Destroy", @event, method: :delete, data: { turbo_frame: '_top'}, class: "rounded-lg py-3 mt-2 px-5 bg-red-600 text-white inline-block font-medium cursor-pointer" %>
 <% end %>

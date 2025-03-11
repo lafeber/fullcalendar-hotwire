@@ -2,7 +2,10 @@ class Event < ApplicationRecord
   validates :title, presence: true
   validates_comparison_of :end, greater_than: :start
 
-  RECURRING_FIELDS = %i[every interval until on].freeze
+  has_many :exceptions, class_name: "Event", foreign_key: "parent_id", dependent: :destroy
+  belongs_to :parent, class_name: "Event", optional: true
+
+  RECURRING_FIELDS = %i[every interval until on except].freeze
 
   alias_attribute :start, :starts_at
   alias_attribute :end, :ends_at
@@ -10,13 +13,14 @@ class Event < ApplicationRecord
   store_accessor :recurring, *RECURRING_FIELDS
 
   scope :single, -> { where(recurring: nil) }
-  scope :single_in_period, ->(starts_at, ends_at) {
-    single.where(starts_at: starts_at..ends_at).or(
-      Event.single.where(ends_at: starts_at..ends_at)
-    )
-  }
-
   scope :recurring, -> { where.not(recurring: nil) }
+
+  # Either the start is in the period, the end is in it, or start is before ane end is after
+  scope :single_in_period, ->(starts_at, ends_at) {
+    single.where(starts_at: starts_at..ends_at)
+    .or(Event.single.where(ends_at: starts_at..ends_at))
+    .or(Event.single.where(starts_at: ..starts_at, ends_at: ends_at..))
+  }
 
   def editable
     recurring.blank?
@@ -27,11 +31,14 @@ class Event < ApplicationRecord
   def self.recurring_in_period(period_starts_at, period_ends_at)
     single_events = []
     Event.recurring.where(starts_at: ..period_ends_at).each do |event|
+      p event.exceptions.pluck(:starts_at)
       r = Recurrence.new(
         every: event.every,
         on: event.on || (event.starts_at.strftime("%w").to_i + 1),
-        starts: period_starts_at.to_datetime,
-        until: period_ends_at.to_datetime)
+        starts: event.starts_at.to_datetime,
+        except: event.exceptions.pluck(:starts_at).map{ |e| e.strftime("%Y-%m-%d") },
+        until: event.until.presence || period_ends_at.to_datetime)
+      p r.events(starts: period_starts_at, until: period_ends_at)
       r.events(starts: period_starts_at, until: period_ends_at).each do |date|
         single_events << Event.new(
           id: event.id,
@@ -39,7 +46,7 @@ class Event < ApplicationRecord
           ends_at: date_plus_time(date, event.ends_at),
           title: event.title,
           color: event.color,
-          recurring: "{ editable: false }",
+          recurring: { editable: false },
           all_day: event.all_day)
       end
     end
