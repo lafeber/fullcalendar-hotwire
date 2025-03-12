@@ -14,7 +14,7 @@ class EventsController < ApplicationController
 
   # GET /events/new
   def new
-    @event = Event.new(starts_at:, ends_at:, color: '#404bad')
+    @event = Event.new(event_params)
   end
 
   # GET /events/1
