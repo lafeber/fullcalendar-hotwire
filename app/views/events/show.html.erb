@@ -12,10 +12,10 @@
         </button>
         <div data-dropdown-target="menu" class="hidden absolute top-4 right-0 z-10 mt-5 flex w-screen max-w-max">
           <div class="text-sm bg-white shadow-lg rounded border overflow-hidden w-32">
-            <%= link_to "This event", events_path(params: { event: { parent_id: @event.id, start: @date, end: @date + 1.minute, title: "del" } }),
+            <%= link_to "This event", events_path(params: { event: { parent_id: @event.id, start: @date, end: @date + 1.minute, title: "del", every: "day" } }),
                                       method: :post,
                                       data: { turbo_method: :post, turbo_frame: '_top' }, class: "block px-4 py-2 hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white" %>
-            <%= link_to "This and following", event_path(@event, params: { event: { until: @date } }), data: { turbo_method: :put, turbo_frame: '_top' }, class: "block px-4 py-2 hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white" %>
+            <%= link_to "This and following", event_path(@event, params: { event: { until: @date - 1.day } }), data: { turbo_method: :put, turbo_frame: '_top' }, class: "block px-4 py-2 hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white" %>
             <%= link_to "All events in series", @event, data: { turbo_method: :delete, turbo_frame: '_top' }, class: "block px-4 py-2 hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white" %>
           </div>
         </div>

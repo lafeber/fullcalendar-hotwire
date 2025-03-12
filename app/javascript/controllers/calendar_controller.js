@@ -42,6 +42,10 @@ export default class extends Controller {
       this.setView();
     });
 
+    addEventListener("turbo:before-stream-render", (_event) => {
+      this.calendar.refetchEvents();
+    });
+
     window.addEventListener("resize", () => {
       this.setView();
     });
@@ -52,10 +56,4 @@ export default class extends Controller {
       this.calendar.changeView('listWeek');
     }
   };
-
-  refresh(e) {
-    if (e.detail.success) {
-      this.calendar.refetchEvents();
-    }
-  }
 }

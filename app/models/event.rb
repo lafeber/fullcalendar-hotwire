@@ -13,7 +13,7 @@ class Event < ApplicationRecord
   store_accessor :recurring, *RECURRING_FIELDS
 
   scope :single, -> { where(recurring: nil) }
-  scope :recurring, -> { where.not(recurring: nil) }
+  scope :recurring, -> { where(parent_id: nil).where.not(recurring: nil) }
 
   # Either the start is in the period, the end is in it, or start is before ane end is after
   scope :single_in_period, ->(starts_at, ends_at) {
@@ -38,8 +38,7 @@ class Event < ApplicationRecord
         starts: event.starts_at.to_datetime,
         except: event.exceptions.pluck(:starts_at).map{ |e| e.strftime("%Y-%m-%d") },
         until: event.until.presence || period_ends_at.to_datetime)
-      p r.events(starts: period_starts_at, until: period_ends_at)
-      r.events(starts: period_starts_at, until: period_ends_at).each do |date|
+      r.events(starts: period_starts_at, until: event.until.presence || period_ends_at).each do |date|
         single_events << Event.new(
           id: event.id,
           starts_at: date_plus_time(date, event.starts_at),
