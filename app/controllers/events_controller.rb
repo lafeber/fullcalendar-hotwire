@@ -2,26 +2,21 @@ class EventsController < ApplicationController
   before_action :set_event, only: %i[ show edit update destroy ]
   before_action :empty_recurring_for_once, only: %i[ create update ]
 
-  # GET /events or /events.json
   def index
     @events = Event.in_period(starts_at, ends_at)
   end
 
-  # GET /events/new
   def new
     @event = Event.new(event_params.merge(color: "#404bad"))
   end
 
-  # GET /events/1
   def show
     @date = Date.parse(params[:date])
   end
 
-  # GET /events/1/edit
   def edit
   end
 
-  # POST /events or /events.json
   def create
     @event = Event.new(event_params)
     if @event.save
@@ -31,26 +26,17 @@ class EventsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /events/1 or /events/1.json
   def update
-    respond_to do |format|
-      if @event.update(event_params)
-        format.html { turbo_notice("Event was successfully updated.") }
-        format.turbo_stream { turbo_notice("Event was successfully updated.") }
-        format.json { render :edit, status: :ok, location: @event }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @event.errors, status: :unprocessable_entity }
-      end
+    if @event.update(event_params)
+      turbo_notice("Success!")
+    else
+      turbo_notice("Fail!")
     end
   end
 
-  # DELETE /events/1 or /events/1.json
   def destroy
-    respond_to do |format|
-      if @event.destroy
-        format.turbo_stream { turbo_notice("Event was successfully destroyed.") }
-      end
+    if @event.destroy
+      turbo_notice("Event was successfully destroyed.")
     end
   end
 

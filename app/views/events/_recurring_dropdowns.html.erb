@@ -1,0 +1,35 @@
+<div
+    data-controller="dropdown"
+    data-action="click@window->dropdown#hide touchstart@window->dropdown#hide keydown.up->dropdown#previousItem keydown.down->dropdown#nextItem keydown.esc->dropdown#hide"
+    class="inline-block relative">
+    <button data-action="dropdown#toggle:stop" class="rounded-lg py-3 mt-2 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer">
+      Edit
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="inline-block fill-current h-4 w-4"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path></svg>
+    </button>
+    <div data-dropdown-target="menu" class="hidden absolute top-4 right-0 z-10 mt-5 flex w-screen max-w-max">
+      <div class="text-sm bg-white shadow-lg rounded border overflow-hidden w-32">
+        <%= link_to "This event", new_event_path(params: { event: { parent_id: event.id, start: date_plus_time(@date, event.starts_at), end: date_plus_time(@date, event.ends_at), title: event.title, color: event.color } }),
+                    class: "block px-4 py-2 hover:bg-blue-600 hover:text-white" %>
+        <%= link_to "All events in series", edit_event_path(event), class: "block px-4 py-2 hover:bg-blue-600 hover:text-white" %>
+      </div>
+    </div>
+</div>
+
+<div
+    data-controller="dropdown"
+    data-action="click@window->dropdown#hide touchstart@window->dropdown#hide keydown.up->dropdown#previousItem keydown.down->dropdown#nextItem keydown.esc->dropdown#hide"
+    class="inline-block relative">
+    <button data-action="dropdown#toggle:stop" class="rounded-lg py-3 mt-2 px-5 bg-red-600 text-white inline-block font-medium cursor-pointer">
+      Destroy
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="inline-block fill-current h-4 w-4"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"></path></svg>
+    </button>
+    <div data-dropdown-target="menu" class="hidden absolute top-4 right-0 z-10 mt-5 flex w-screen max-w-max">
+      <div class="text-sm bg-white shadow-lg rounded border overflow-hidden w-32">
+        <%= link_to "This event", events_path(params: { event: { parent_id: event.id, start: @date, end: @date + 1.minute, title: "del", every: "day" } }),
+                                  method: :post,
+                                  data: { turbo_method: :post, turbo_frame: '_top' }, class: "block px-4 py-2 hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white" %>
+        <%= link_to "This and following", event_path(event, params: { event: { until: @date - 1.day } }), data: { turbo_method: :put, turbo_frame: '_top' }, class: "block px-4 py-2 hover:bg-red-600 hover:text-white" %>
+        <%= link_to "All events in series", event, data: { turbo_method: :delete, turbo_frame: '_top' }, class: "block px-4 py-2 hover:bg-red-600 hover:text-white" %>
+      </div>
+    </div>
+</div>
