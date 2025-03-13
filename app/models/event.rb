@@ -22,37 +22,13 @@ class Event < ApplicationRecord
     .or(Event.single.where(starts_at: ..starts_at, ends_at: ends_at..))
   }
 
+  # Can you drag the event around
   def editable
     recurring.blank?
   end
 
-  # Loop over all event that have a start date before the period end
-  # Convert the occurrences for that event back to the event
-  def self.recurring_in_period(period_starts_at, period_ends_at)
-    single_events = []
-    Event.recurring.where(starts_at: ..period_ends_at).each do |event|
-      p event.exceptions.pluck(:starts_at)
-      r = Recurrence.new(
-        every: event.every,
-        on: event.on || (event.starts_at.strftime("%w").to_i + 1),
-        starts: event.starts_at.to_datetime,
-        except: event.exceptions.pluck(:starts_at).map{ |e| e.strftime("%Y-%m-%d") },
-        until: event.until.presence || period_ends_at.to_datetime)
-      r.events(starts: period_starts_at, until: event.until.presence || period_ends_at).each do |date|
-        single_events << Event.new(
-          id: event.id,
-          starts_at: date_plus_time(date, event.starts_at),
-          ends_at: date_plus_time(date, event.ends_at),
-          title: event.title,
-          color: event.color,
-          recurring: { editable: false },
-          all_day: event.all_day)
-      end
-    end
-    single_events
-  end
-
-  def self.date_plus_time(date, time)
-    DateTime.new(date.year, date.month, date.day, time.hour, time.min, 0)
+  def self.in_period(starts_at, ends_at)
+    Event.single_in_period(starts_at, ends_at).to_a
+      .concat(RecurringEventsPresenter.new(starts_at, ends_at).events)
   end
 end

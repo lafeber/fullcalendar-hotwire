@@ -4,17 +4,12 @@ class EventsController < ApplicationController
 
   # GET /events or /events.json
   def index
-    if params[:start]
-      @events = Event.single_in_period(starts_at, ends_at).to_a
-      @events.concat(Event.recurring_in_period(starts_at, ends_at))
-    else
-      @events = []
-    end
+    @events = Event.in_period(starts_at, ends_at)
   end
 
   # GET /events/new
   def new
-    @event = Event.new(event_params)
+    @event = Event.new(event_params.merge(color: "#404bad"))
   end
 
   # GET /events/1
@@ -29,16 +24,10 @@ class EventsController < ApplicationController
   # POST /events or /events.json
   def create
     @event = Event.new(event_params)
-
-    respond_to do |format|
-      if @event.save
-        format.html { redirect_to events_url, notice: "Event was successfully created." }
-        format.turbo_stream { turbo_notice("Success!") }
-        format.json { render :edit, status: :created, location: @event }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @event.errors, status: :unprocessable_entity }
-      end
+    if @event.save
+      turbo_notice("Success!")
+    else
+      turbo_notice("Fail!")
     end
   end
 
@@ -82,22 +71,20 @@ class EventsController < ApplicationController
     end
   end
 
-  # Use callbacks to share common setup or constraints between actions.
+  def turbo_notice(notice)
+    render turbo_stream: turbo_stream.update('popup',
+      ApplicationController.render(NoticeComponent.new(notice: notice))
+    )
+  end
 
-    def turbo_notice(notice)
-      render turbo_stream: turbo_stream.update('popup',
-        ApplicationController.render(NoticeComponent.new(notice: notice))
-      )
-    end
+  def set_event
+    @event = Event.find(params[:id])
+  end
 
-    def set_event
-      @event = Event.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
-    def event_params
-      params.require(:event).permit(:title, :start, :end, :color, :all_day, :parent_id, :recurring,
-        *Event::RECURRING_FIELDS
-      )
-    end
+  # Only allow a list of trusted parameters through.
+  def event_params
+    params.require(:event).permit(:title, :start, :end, :color, :all_day, :parent_id, :recurring,
+      *Event::RECURRING_FIELDS
+    )
+  end
 end

@@ -12,13 +12,12 @@
         </button>
         <div data-dropdown-target="menu" class="hidden absolute top-4 right-0 z-10 mt-5 flex w-screen max-w-max">
           <div class="text-sm bg-white shadow-lg rounded border overflow-hidden w-32">
-            <%= link_to "This event", new_event_path(params: { event: { parent_id: @event.id, start: Event.date_plus_time(@date, @event.starts_at), end: Event.date_plus_time(@date, @event.ends_at), title: @event.title, color: @event.color } }),
+            <%= link_to "This event", new_event_path(params: { event: { parent_id: @event.id, start: date_plus_time(@date, @event.starts_at), end: date_plus_time(@date, @event.ends_at), title: @event.title, color: @event.color } }),
                         class: "block px-4 py-2 hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white" %>
             <%= link_to "All events in series", edit_event_path(@event), class: "block px-4 py-2 hover:bg-red-600 dark:hover:bg-red-600 dark:hover:text-white" %>
           </div>
         </div>
     </div>
-
 
     <div
         data-controller="dropdown"
@@ -39,7 +38,7 @@
         </div>
     </div>
   <% else %>
-    <%= button_to "Edit", edit_event_path(@event), data: { turbo_frame: '_top' }, class: "rounded-lg py-3 mt-2 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+    <%= button_to "Edit", edit_event_path(@event), method: :get, class: "rounded-lg py-3 mt-2 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
     <%= button_to "Destroy", @event, method: :delete, data: { turbo_frame: '_top' }, class: "rounded-lg py-3 mt-2 px-5 bg-red-600 text-white inline-block font-medium cursor-pointer" %>
   <% end %>
 <% end %>

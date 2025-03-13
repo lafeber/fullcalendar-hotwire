@@ -33,7 +33,7 @@ export default class extends Controller {
         );
       },
       select: function(info) {
-        overlay.src = `/events/new?start=${info.startStr}&end=${info.endStr}`;
+        overlay.src = `/events/new?event[start]=${info.startStr}&event[end]=${info.endStr}`;
       },
     });
 

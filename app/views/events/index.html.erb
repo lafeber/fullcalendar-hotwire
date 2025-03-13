@@ -3,7 +3,7 @@
     <%= image_tag "//ssl.gstatic.com/calendar/images/dynamiclogo_2020q4/calendar_#{Time.zone.now.day}_2x.png", class: "w-10 h-10 inline-block" %>
     Calendar
   </h1>
-  <%= link_to 'New event', new_event_path, data: { turbo_frame: 'popup' }, class: "rounded-lg py-3 px-5 mt-2 mr-2 bg-blue-600 text-white block font-medium" %>
+  <%= link_to 'New event', new_event_path(params: { event: { start: DateTime.current, end: 1.hour.from_now }}), data: { turbo_frame: 'popup' }, class: "rounded-lg py-3 px-5 mt-2 mr-2 bg-blue-600 text-white block font-medium" %>
 </div>
 
 <hr class="mt-2 mb-2">
