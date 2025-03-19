@@ -26,7 +26,7 @@ class Event < ApplicationRecord
     .or(single.overlapping_period(starts_at, ends_at))
   }
 
-  # Can you drag the event around
+  # 'editable' is a fullcalendar method; can you drag the event around?
   def editable
     recurring.blank?
   end
