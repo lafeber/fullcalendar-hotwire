@@ -8,8 +8,10 @@
     </button>
     <div data-dropdown-target="menu" class="hidden absolute top-4 right-0 z-10 mt-5 flex w-screen max-w-max">
       <div class="text-sm bg-white shadow-lg rounded border overflow-hidden w-32">
-        <%= link_to "This event", new_event_path(params: { event: { parent_id: event.id, start: date_plus_time(@date, event.starts_at), end: date_plus_time(@date, event.ends_at), title: event.title, color: event.color } }),
+        <%= link_to "This event",
+                    new_event_path(params: { event: occurrence_attributes(event, @date).merge(parent_id: event.id, every: :once) }),
                     class: "block px-4 py-2 hover:bg-blue-600 hover:text-white" %>
+        <%= link_to "This and following", new_event_path(params: { event: occurrence_attributes(event, @date).merge(event_until_id: event.id) }), class: "block px-4 py-2 hover:bg-blue-600 hover:text-white" %>
         <%= link_to "All events in series", edit_event_path(event), class: "block px-4 py-2 hover:bg-blue-600 hover:text-white" %>
       </div>
     </div>

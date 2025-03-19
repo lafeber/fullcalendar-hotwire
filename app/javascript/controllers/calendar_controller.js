@@ -16,7 +16,7 @@ export default class extends Controller {
       plugins: [ dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin ],
       selectable: true,
       editable: true,
-      timeZone: "Amsterdam",
+      timeZone: "UTF",
       events: "/events.json",
       initialView: "timeGridWeek",
       headerToolbar: {

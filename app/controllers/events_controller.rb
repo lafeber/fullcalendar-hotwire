@@ -1,13 +1,15 @@
 class EventsController < ApplicationController
   before_action :set_event, only: %i[ show edit update destroy ]
   before_action :empty_recurring_for_once, only: %i[ create update ]
+  before_action :set_event_until, only: :create
 
   def index
     @events = Event.in_period(starts_at, ends_at)
   end
 
   def new
-    @event = Event.new(event_params.merge(color: "#404bad"))
+    @event = Event.new(event_params)
+    @event.color ||= "#404bad"
   end
 
   def show
@@ -22,7 +24,7 @@ class EventsController < ApplicationController
     if @event.save
       turbo_notice("Success!")
     else
-      turbo_notice("Fail!")
+      render :edit
     end
   end
 
@@ -30,7 +32,7 @@ class EventsController < ApplicationController
     if @event.update(event_params)
       turbo_notice("Success!")
     else
-      turbo_notice("Fail!")
+      render :edit
     end
   end
 
@@ -57,6 +59,13 @@ class EventsController < ApplicationController
     end
   end
 
+  def set_event_until
+    return if event_params["event_until_id"].blank?
+
+    @event_until = Event.find(event_params["event_until_id"])
+    @event_until.update(until: event_params["start"].to_date - 1.day)
+  end
+
   def turbo_notice(notice)
     render turbo_stream: turbo_stream.update('popup',
       ApplicationController.render(NoticeComponent.new(notice: notice))
@@ -69,7 +78,7 @@ class EventsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def event_params
-    params.require(:event).permit(:title, :start, :end, :color, :all_day, :parent_id, :recurring,
+    params.require(:event).permit(:title, :start, :end, :color, :all_day, :parent_id, :recurring, :event_until_id,
       *Event::RECURRING_FIELDS
     )
   end
