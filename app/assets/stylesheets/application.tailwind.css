@@ -1,13 +1,7 @@
-@import '@fullcalendar/common/main.min.css';
-@import '@fullcalendar/daygrid/main.min.css';
-@import '@fullcalendar/list/main.min.css';
-@import '@fullcalendar/timegrid/main.min.css';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* hidden */
+@import "@fullcalendar/common/main.min.css";
+@import "@fullcalendar/daygrid/main.min.css";
+@import "@fullcalendar/list/main.min.css";
+@import "@fullcalendar/timegrid/main.min.css";
 
 .fc-event{
   cursor: pointer;

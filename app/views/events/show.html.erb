@@ -4,8 +4,8 @@
       <%= render "recurring_dropdowns", event: @event %>
     </div>
   <% else %>
-    <%= button_to "Edit", edit_event_path(@event), method: :get, class: "rounded-lg py-3 mt-2 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
-    <%= button_to "Destroy", @event, method: :delete, data: { turbo_frame: '_top' }, class: "rounded-lg py-3 mt-2 px-5 bg-red-600 text-white inline-block font-medium cursor-pointer" %>
+    <%= button_to "Edit", edit_event_path(@event), method: :get, class: "btn btn-primary" %>
+    <%= button_to "Destroy", @event, method: :delete, data: { turbo_frame: '_top' }, class: "btn btn-error" %>
   <% end %>
 
   <ul>

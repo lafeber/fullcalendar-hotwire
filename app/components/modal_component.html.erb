@@ -1,12 +1,14 @@
 <turbo-frame id="popup" data-calendar-target="popup">
   <div data-controller="modal" data-modal-open-value="true">
-    <dialog data-modal-target="dialog" class="p-8 rounded-lg backdrop:bg-black/80">
-      <div class="flex w-full justify-between">
-        <h2 class="text-xl"><%= @title %></h2>
-        <button class="ml-2 text-xl inline-block font-medium cursor-pointer" data-action="modal#close">&times;</button>
-      </div>
+    <dialog data-modal-target="dialog" class="modal">
+      <div class="modal-box">
+        <div class="flex justify-between">
+          <h2 class="text-xl"><%= @title %></h2>
+          <button class="ml-2 text-xl inline-block font-medium cursor-pointer" data-action="modal#close">&times;</button>
+        </div>
 
-      <p><%= content %></p>
+        <p><%= content %></p>
+      </div>
     </dialog>
   </div>
 </turbo-frame>

@@ -1,6 +1,6 @@
 <%= form_with(model: event, class: "contents") do |form| %>
   <% if event.errors.any? %>
-    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+    <div role="alert" id="error_explanation" class="alert alert-error">
       <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
 
       <ul>
@@ -12,57 +12,75 @@
   <% end %>
 
   <div class="my-5">
-    <%= form.label :title %>
-    <%= form.text_field :title, autofocus: true, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.label :title, class: "floating-label" do %>
+      <span>Title</span>
+      <%= form.text_field :title, autofocus: true, class: "input" %>
+    <% end %>
   </div>
 
   <div class="my-5">
-    <%= form.label :start %>
-    <%= form.datetime_field :start, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.label :start, class: "floating-label" do %>
+      <span>Start</span>
+      <%= form.datetime_field :start, class: "input" %>
+    <% end %>
   </div>
 
   <div class="my-5">
-    <%= form.label :end %>
-    <%= form.datetime_field :end, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+    <%= form.label :end, class: "floating-label" do %>
+      <span>End</span>
+      <%= form.datetime_field :end, class: "input" %>
+    <% end %>
   </div>
 
   <div class="my-5">
-    <label class="inline-flex items-center cursor-pointer">
-      <%= form.check_box :all_day, class: "sr-only peer" %>
-      <input type="checkbox" value="" class="sr-only peer">
-      <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:w-5 after:h-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600"></div>
-
-      <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300"> All day</span>
-    </label>
+    <%= form.label :all_day, class: "fieldset-label" do %>
+      <%= form.check_box :all_day, class: "toggle" %>
+      <p class="text-base-content text-sm">All day</p>
+    <% end %>
   </div>
 
-  <div data-controller='toggle' class="m-2">
+  <div class="my-5">
+    <%= form.label :color, class: "floating-label" do %>
+      <span>Color</span>
+      <%= form.color_field :color, class: "input" %>
+    <% end %>
+  </div>
+
+  <div data-controller="toggle">
     <div class="my-5">
-      <%= form.label :every %>
-      <%#= data: { action: "click->toggle#hide for all, show for custom" } %>
-      <%= form.select :every, %w[once day week month year], {} , class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+      <%= form.label :every, class: "floating-label" do %>
+        <span>Repeat</span>
+        <%= form.select :every, %w[once day week month year], {}, class: "input" %>
+      <% end %>
     </div>
 
-    <div class="hidden" data-toggle-target="toggleable">
+    <div class="my-5">
+      <%= form.label :advanced, class: "fieldset-label" do %>
+        <%= check_box_tag :advanced, class: "toggle", data: { action: "click->toggle#toggle" } %>
+        <p class="text-base-content text-sm">Advanced</p>
+      <% end %>
+    </div>
+
+    <div class="<%= "hidden" if form.object.interval.blank? %>" data-toggle-target="toggleable">
       <div class="my-5">
-        <%#= form.label :interval %>
-        <%#= form.number_field :interval, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+        <%= form.label :interval, class: "floating-label" do %>
+          <span>Interval</span>
+          <%= form.number_field :interval, class: "input" %>
+        <% end %>
       </div>
 
       <div class="my-5">
-        <%#= form.label :until %>
-        <%#= form.date_field :until, class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" %>
+        <%= form.label :until, class: "floating-label" do %>
+          <span>Until</span>
+          <%= form.date_field :until, class: "input" %>
+        <% end %>
       </div>
     </div>
-  </div>
-
-  <div class="my-5">
-    <%= form.color_field :color, class: "block shadow rounded-md border border-gray-200 outline-none px-1 mt-2 w-full" %>
   </div>
 
   <div class="inline">
     <%= form.hidden_field :parent_id %>
     <%= form.hidden_field :event_until_id %>
-    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+    <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>
